@@ -43,9 +43,12 @@ function RegistrationForm() {
 
     useEffect(() => {
         let message;
-        let statusColor = 'success';
-        if (!serverResponse === 201) {
+        let statusColor;
+        
+        if (serverResponse !== 201) {
             statusColor = 'warning'
+        } else {
+            statusColor = 'success'
         }
 
         switch (serverResponse) {
@@ -81,7 +84,7 @@ function RegistrationForm() {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        axios.post('/api/user_registration', { formValues },
+        axios.post('/api/user_registration', formValues,
             {
             headers: {
                 'Content-Type': 'application/json'

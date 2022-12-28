@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const checkPassword = require('../util/checkPassword');
-const User = require('../schemas/UserSchema');
-const encryptPassword = require('../util/encryptPassword');
+const checkPassword = require('../../util/checkPassword');
+const User = require('../../schemas/UserSchema');
+const encryptPassword = require('../../util/encryptPassword');
 const jwt = require('jsonwebtoken');
 
 router.post('/', async (req, res, next) => {
@@ -52,7 +52,15 @@ router.post('/', async (req, res, next) => {
             password: await encryptPassword(registerPassword),
         })
         console.log('User successfully added to the database.');
-        const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET);
+
+        const {username, profilePicture, _id} = user;
+        const clientData = {
+            username,
+            profilePicture,
+            _id
+        }
+
+        const token = jwt.sign(clientData, process.env.JWT_SECRET);
         res.cookie("token", token, {
                 httpOnly: true
             })
